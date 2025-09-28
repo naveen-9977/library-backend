@@ -16,6 +16,7 @@ router.post('/register', async (req, res) => {
         await user.save();
         res.status(201).json({ msg: 'User registered successfully. Waiting for admin approval.' });
     } catch (err) {
+        console.error(err.message);
         res.status(500).send('Server error');
     }
 });
@@ -37,6 +38,7 @@ router.post('/login', async (req, res) => {
         res.json(user);
 
     } catch (err) {
+        console.error(err.message);
         res.status(500).send('Server error');
     }
 });
@@ -48,6 +50,7 @@ router.get('/admin/pending', async (req, res) => {
         const users = await User.find({ isApproved: false, isAdmin: false });
         res.json(users);
     } catch (err) {
+        console.error(err.message);
         res.status(500).send('Server error');
     }
 });
@@ -66,8 +69,23 @@ router.put('/admin/approve/:userId', async (req, res) => {
         }
         res.json(user);
     } catch (err) {
+        console.error(err.message);
         res.status(500).send('Server error');
     }
 });
+
+// --- NEW ROUTE ADDED ---
+// --- ADMIN: Get all users (approved and pending) ---
+router.get('/admin/users', async (req, res) => {
+    try {
+        // Find all users who are not admins
+        const users = await User.find({ isAdmin: false });
+        res.json(users);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
+
 
 module.exports = router;
