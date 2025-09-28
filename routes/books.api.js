@@ -1,5 +1,6 @@
 const express = require('express');
 const Book = require('../models/book.model');
+const Notification = require('../models/notification.model'); // Import Notification model
 const router = express.Router();
 
 // ADMIN: Add a new book
@@ -8,6 +9,15 @@ router.post('/', async (req, res) => {
         const { title, author, subject, quantity } = req.body;
         const newBook = new Book({ title, author, subject, quantity });
         await newBook.save();
+
+        // Create a notification when a new book is added
+        const notification = new Notification({
+            title: 'New Book Added',
+            message: `The book "${title}" by ${author} is now available in the library.`,
+            type: 'NewBook',
+        });
+        await notification.save();
+
         res.status(201).json(newBook);
     } catch (err) {
         res.status(500).send('Server Error');
