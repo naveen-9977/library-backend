@@ -13,4 +13,7 @@ BookSchema.virtual('isAvailable').get(function() {
     return this.quantity > this.issuedQuantity;
 });
 
+// ADD THIS LINE to include virtuals in the output
+BookSchema.set('toJSON', { virtuals: true });
+
 module.exports = mongoose.model('Book', BookSchema);
