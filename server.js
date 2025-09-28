@@ -14,10 +14,10 @@ app.use(express.json({ extended: false }));
 
 // Define Routes
 app.use('/api', require('./routes/api'));
+app.use('/api/books', require('./routes/books.api')); // ADD THIS LINE
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
-// Export for Vercel
 module.exports = app;
