@@ -108,6 +108,7 @@ router.get('/history/user/:userId', async (req, res) => {
     try {
         const history = await Issue.find({ user: req.params.userId })
             .populate('book')
+            .populate('user') // THIS LINE WAS ADDED TO FIX THE CRASH
             .sort({ issueDate: -1 });
 
         const unpaidPenalties = await Issue.aggregate([
