@@ -14,7 +14,9 @@ app.use(express.json({ extended: false }));
 
 // Define Routes
 app.use('/api', require('./routes/api'));
-app.use('/api/books', require('./routes/books.api')); // ADD THIS LINE
+app.use('/api/books', require('./routes/books.api'));
+app.use('/api/issues', require('./routes/issues.api'));
+app.use('/api/communications', require('./routes/communications.api'));
 
 const PORT = process.env.PORT || 3000;
 
