@@ -14,10 +14,11 @@ app.use(express.json({ extended: false }));
 
 // Define Routes
 app.use('/api', require('./routes/api'));
+app.use('/api/users', require('./routes/users.api')); // THIS LINE IS NEW
 app.use('/api/books', require('./routes/books.api'));
 app.use('/api/issues', require('./routes/issues.api'));
 app.use('/api/communications', require('./routes/communications.api'));
-app.use('/api/notifications', require('./routes/notifications.api')); // This line is new
+app.use('/api/notifications', require('./routes/notifications.api'));
 
 const PORT = process.env.PORT || 3000;
 
