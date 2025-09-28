@@ -107,5 +107,34 @@ router.get('/user/:userId', async (req, res) => {
     }
 });
 
+// --- NEW ROUTES FOR REPORTS & HISTORY ---
+
+// STUDENT: Get a user's entire borrowing history (issued and returned)
+router.get('/history/user/:userId', async (req, res) => {
+    try {
+        const history = await Issue.find({ user: req.params.userId })
+            .populate('book')
+            .sort({ issueDate: -1 });
+        res.json(history);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// ADMIN: Get a report of all issues with penalties
+router.get('/reports/penalties', async (req, res) => {
+    try {
+        const penaltyReport = await Issue.find({ penalty: { $gt: 0 } }) // Find issues where penalty is greater than 0
+            .populate('book', 'title')
+            .populate('user', 'name email')
+            .sort({ dueDate: 1 });
+        res.json(penaltyReport);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
 
 module.exports = router;
