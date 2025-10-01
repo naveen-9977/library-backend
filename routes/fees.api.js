@@ -13,11 +13,15 @@ router.get('/user/:userId', async (req, res) => {
     }
 });
 
-// STUDENT: Get a student's pending fees
+// STUDENT: Get a student's pending fees and total due
 router.get('/student/:userId', async (req, res) => {
     try {
-        const records = await FeeRecord.find({ user: req.params.userId, status: 'Pending' }).sort({ year: 1, month: 1 });
-        res.json(records);
+        const pendingFees = await FeeRecord.find({ user: req.params.userId, status: 'Pending' }).sort({ year: 1, month: 1 });
+        const totalDue = pendingFees.reduce((acc, fee) => acc + fee.amount, 0);
+        res.json({
+            pendingFees,
+            totalDue,
+        });
     } catch (err) {
         res.status(500).send('Server Error');
     }

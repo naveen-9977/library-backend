@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./db');
+const generateMonthlyFees = require('./cron/feeGenerator'); // Import the cron job
 require('dotenv').config();
 
 const app = express();
@@ -24,6 +25,9 @@ app.use('/api/notifications', require('./routes/notifications.api'));
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
+  generateMonthlyFees(); // Start the cron job
+});
 
 module.exports = app;
