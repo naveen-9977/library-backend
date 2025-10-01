@@ -13,6 +13,16 @@ router.get('/user/:userId', async (req, res) => {
     }
 });
 
+// STUDENT: Get a student's pending fees
+router.get('/student/:userId', async (req, res) => {
+    try {
+        const records = await FeeRecord.find({ user: req.params.userId, status: 'Pending' }).sort({ year: 1, month: 1 });
+        res.json(records);
+    } catch (err) {
+        res.status(500).send('Server Error');
+    }
+});
+
 // ADMIN: Record a cash payment
 router.put('/record-cash/:feeId', async (req, res) => {
     try {
