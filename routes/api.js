@@ -1,7 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user.model');
-const FeeRecord = require('../models/feeRecord.model'); // Added FeeRecord model
+
+const router = express.Router();
 
 // --- NEW ROUTE for Admin Stats ---
 router.get('/admin/stats', async (req, res) => {
@@ -89,18 +90,6 @@ router.put('/admin/approve/:userId', async (req, res) => {
         if (!user) {
             return res.status(404).json({ msg: 'User not found' });
         }
-
-        // Generate the first fee record for the new user
-        const currentMonth = new Date().getMonth() + 1;
-        const currentYear = new Date().getFullYear();
-        const feeRecord = new FeeRecord({
-            user: user._id,
-            month: currentMonth,
-            year: currentYear,
-            amount: 500,
-        });
-        await feeRecord.save();
-        
         res.json(user);
     } catch (err) {
         console.error(err.message);
